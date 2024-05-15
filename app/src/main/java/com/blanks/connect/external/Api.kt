@@ -1,0 +1,5 @@
+const val ENDPOINT_CREATE = "ServerApi/addStaf"
+const val ENDPOINT_UPDATE = "ServerApi/updateStaf"
+const val ENDPOINT_GET = "ServerApi/getStaf"
+const val ENDPOINT_DELETE_STAF = "ServerApi/deleteStaf"
+const val BASE_URL = "http://localhost:7002/"

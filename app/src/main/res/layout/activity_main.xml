@@ -13,7 +13,6 @@
         tools:listitem="@layout/item_data"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_above="@id/createButton"
-        tools:itemCount="10"
         />
 
     <Button

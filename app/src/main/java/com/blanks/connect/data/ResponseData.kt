@@ -1,7 +1,12 @@
 package com.blanks.connect.data
 
-data class ResponseData<T>(
+import com.google.gson.annotations.SerializedName
+
+data class ResponseData(
+    @field:SerializedName("status")
     val status: String,
+    @field:SerializedName("message")
     val message: String,
-    val data: T
+    @field:SerializedName("data")
+    val data: ArrayList<Employee>
 )

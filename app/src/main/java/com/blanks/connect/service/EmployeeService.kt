@@ -17,8 +17,8 @@ interface EmployeeService {
     fun createEmployee(@Body body: HashMap<String, Any>): Call<EmptyResponse>
 
     @GET(ENDPOINT_GET)
-    fun getEmployees(): Call<ResponseData<List<Employee>>>
+    fun getEmployees(): Call<ResponseData>
 
-    @DELETE(ENDPOINT_DELETE_STAF)
-    fun deleteEmployee(id: String): Call<EmptyResponse>
+    @POST(ENDPOINT_DELETE_STAF)
+    fun deleteEmployee(@Body body: HashMap<String, Any>): Call<EmptyResponse>
 }

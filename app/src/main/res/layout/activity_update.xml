@@ -16,6 +16,12 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/etPhone"
+        android:hint="Telepon"
+        android:layout_marginBottom="10dp"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/etAddress"
         android:hint="Alamat"
         android:layout_marginBottom="10dp"/>

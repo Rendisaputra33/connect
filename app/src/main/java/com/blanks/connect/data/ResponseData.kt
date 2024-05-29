@@ -8,5 +8,5 @@ data class ResponseData(
     @field:SerializedName("message")
     val message: String,
     @field:SerializedName("data")
-    val data: ArrayList<Employee>
+    val data: List<Employee>
 )

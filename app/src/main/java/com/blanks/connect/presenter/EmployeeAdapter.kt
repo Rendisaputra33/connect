@@ -17,6 +17,7 @@ class EmployeeAdapter(
 
     interface Events {
         fun onDelete(recipe: Employee)
+        fun onClickEdit(recipe: Employee)
     }
 
     inner class ViewHolder(private val binding: ItemDataBinding) :
@@ -32,7 +33,9 @@ class EmployeeAdapter(
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = employees.size
+    override fun getItemCount(): Int {
+        return employees.size
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = employees[position]
@@ -42,6 +45,10 @@ class EmployeeAdapter(
 
         binding.btnHapus.setOnClickListener {
             listener.onDelete(item)
+        }
+
+        binding.card.setOnClickListener {
+            listener.onClickEdit(item)
         }
     }
 

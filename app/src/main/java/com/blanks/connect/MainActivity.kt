@@ -2,11 +2,10 @@ package com.blanks.connect
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.blanks.connect.data.Employee
+import com.blanks.connect.data.ResponseData
 import com.blanks.connect.databinding.ActivityMainBinding
 import com.blanks.connect.external.ApiBuilder
 import com.blanks.connect.presenter.EmployeeAdapter
@@ -22,20 +21,42 @@ class MainActivity : AppCompatActivity() {
 
     private val adapter: EmployeeAdapter = EmployeeAdapter(arrayListOf(), object: EmployeeAdapter.Events {
         override fun onDelete(recipe: Employee) {
-//
-            CoroutineScope(Dispatchers.IO).launch {
-                val body = HashMap<String, Any>().apply {
-                    set("id", recipe.id)
-                }
+            val body = HashMap<String, Any>().apply {
+                set("id", recipe.id)
+            }
 
+            CoroutineScope(Dispatchers.IO).launch {
                val response = client.deleteEmployee(body).await()
+
+                if (!response.status.lowercase().contains("gagal")) {
+                    val data = client.getEmployees().await()
+
+                    withContext(Dispatchers.Main) {
+                        fetch(data)
+                    }
+                }
 
                 withContext(Dispatchers.Main) {
                     Toast.makeText(this@MainActivity, response.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
+
+        override fun onClickEdit(recipe: Employee) {
+            val intent = Intent(this@MainActivity, UpdateActivity::class.java)
+            intent.putExtra("id", recipe.id)
+
+            startActivity(intent)
+        }
     })
+
+    fun fetch(response: ResponseData) {
+        if (response.data == null) {
+            adapter.dispatch(arrayListOf())
+        } else {
+            adapter.dispatch(response.data.toCollection(ArrayList<Employee>()))
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,22 +71,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.containerList.adapter = adapter
-        binding.containerList.layoutManager = LinearLayoutManager(binding.containerList.context)
 
         CoroutineScope(Dispatchers.IO).launch {
             val response = getData()
 
-            response.forEach {
-                Log.i("INDO DATA : " , it.staf_alamat)
-            }
-
             withContext(Dispatchers.Main) {
-                adapter.dispatch(response)
+                adapter.dispatch(response.toCollection(ArrayList<Employee>()))
             }
         }
     }
 
-    private suspend fun getData(): ArrayList<Employee> {
+    private suspend fun getData(): List<Employee> {
         val response = client.getEmployees().await()
 
         if (response.data == null) return arrayListOf()
